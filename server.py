@@ -409,9 +409,14 @@ def _score_metric(value: Optional[float], direction: str, thresholds: List[float
     direction='higher_better'  → value >= thresholds[3] → 4, etc.
     direction='lower_better'   → value <= thresholds[0] → 4, etc.
 
-    thresholds must have 4 elements: [worst, below_avg, above_avg, best].
+    thresholds must have exactly 4 elements: [worst, below_avg, above_avg, best].
     Returns 0 if value is None.
+
+    Raises:
+        ValueError: If thresholds does not have exactly 4 elements.
     """
+    if len(thresholds) != 4:
+        raise ValueError(f"thresholds must have exactly 4 elements, got {len(thresholds)}")
     if value is None:
         return 0
     t = thresholds  # [worst, below_avg, above_avg, best]
@@ -548,7 +553,8 @@ def get_top_stock_drivers(symbol: str) -> str:
         # ---- Score each driver ----
 
         # 1. Valuation (lower PE/PB/EV_EBITDA = better)
-        val_pe_score = _score_metric(forward_pe or trailing_pe, "lower_better", [10, 15, 25, 40])
+        pe = forward_pe if forward_pe is not None else trailing_pe
+        val_pe_score = _score_metric(pe, "lower_better", [10, 15, 25, 40])
         val_pb_score = _score_metric(price_to_book, "lower_better", [1, 2, 4, 8])
         val_ev_score = _score_metric(ev_to_ebitda, "lower_better", [6, 10, 16, 25])
         valuation_score = round((val_pe_score + val_pb_score + val_ev_score) / 3)
@@ -557,7 +563,7 @@ def get_top_stock_drivers(symbol: str) -> str:
         # 2. Growth
         rev_g_score = _score_metric(revenue_growth, "higher_better", [0.0, 0.05, 0.15, 0.25])
         earn_g_score = _score_metric(earnings_growth, "higher_better", [0.0, 0.05, 0.15, 0.25])
-        peg_score = _score_metric(peg_ratio, "lower_better", [0.5, 1.0, 1.5, 2.5]) if peg_ratio else 0
+        peg_score = _score_metric(peg_ratio, "lower_better", [0.5, 1.0, 1.5, 2.5]) if peg_ratio is not None else 0
         growth_score = round((rev_g_score + earn_g_score + peg_score) / 3)
         growth_score = max(0, min(4, growth_score))
 
@@ -590,20 +596,19 @@ def get_top_stock_drivers(symbol: str) -> str:
 
         # 7. Dividend Quality
         div_yield_score = _score_metric(dividend_yield, "higher_better", [0.005, 0.015, 0.03, 0.05])
-        # Payout ratio: moderate (30-60%) is best; very high is bad
-        if payout_ratio is not None:
-            if 0.30 <= payout_ratio <= 0.60:
-                pr_score = 4
-            elif 0.60 < payout_ratio <= 0.80:
-                pr_score = 2
-            elif payout_ratio > 0.80:
-                pr_score = 1
-            elif payout_ratio > 0:
-                pr_score = 3
-            else:
-                pr_score = 0
-        else:
+        # Payout ratio scoring: moderate (30-60%) is ideal; very high (>80%) is risky
+        if payout_ratio is None:
             pr_score = 0
+        elif 0.30 <= payout_ratio <= 0.60:
+            pr_score = 4  # Sustainable and generous
+        elif 0 < payout_ratio < 0.30:
+            pr_score = 3  # Conservative but growing
+        elif 0.60 < payout_ratio <= 0.80:
+            pr_score = 2  # Elevated but manageable
+        elif payout_ratio > 0.80:
+            pr_score = 1  # Unsustainably high
+        else:
+            pr_score = 0  # Zero or negative payout
         dividend_score = round((div_yield_score + pr_score) / 2)
         dividend_score = max(0, min(4, dividend_score))
 

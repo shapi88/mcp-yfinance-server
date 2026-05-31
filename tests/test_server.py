@@ -319,12 +319,13 @@ class TestGetStock5yHistory:
         assert result["dividends"] == []
 
     def test_invalid_symbol_graceful(self):
-        mock = _make_mock_ticker(info={})
+        """An invalid symbol whose history() raises should return empty price_history_weekly."""
+        mock = _make_mock_ticker(info={"symbol": "ZZZZ"})
         mock.history.side_effect = RuntimeError("bad symbol")
         with patch("server.yf.Ticker", return_value=mock):
             result = json.loads(server.get_stock_5y_history("ZZZZ"))
-        # Should still return a result dict with empty price history, not a top-level crash
-        assert "price_history_weekly" in result or "error" in result
+        assert "price_history_weekly" in result
+        assert result["price_history_weekly"] == []
 
     def test_exception_returns_error(self):
         with patch("server.yf.Ticker", side_effect=RuntimeError("fail")):
