@@ -4,11 +4,10 @@ Provider protocols and concrete implementations.
 Segregated interfaces (ISP) allow each tool to depend only on the capabilities it needs.
 The concrete YFinanceProvider satisfies all protocols, enabling substitution (LSP).
 """
-from typing import Any, Dict, Optional, runtime_checkable
+from typing import Any, Dict, Optional, Protocol, runtime_checkable
 
 import pandas as pd
 import yfinance as yf
-from typing import Protocol
 
 
 @runtime_checkable

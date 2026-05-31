@@ -10,11 +10,11 @@ import logging
 
 from mcp.server.fastmcp import FastMCP
 
-from finance.providers import YFinanceProvider
-from finance.tools.details import get_enhanced_stock_details as _get_enhanced_stock_details
-from finance.tools.drivers import get_top_stock_drivers as _get_top_stock_drivers
-from finance.tools.history import get_stock_5y_history as _get_stock_5y_history
-from finance.tools.metrics import get_advanced_stock_metrics as _get_advanced_stock_metrics
+from mcp_yfinance_server.finance.providers import YFinanceProvider
+from mcp_yfinance_server.finance.tools.details import get_enhanced_stock_details as _get_enhanced_stock_details
+from mcp_yfinance_server.finance.tools.drivers import get_top_stock_drivers as _get_top_stock_drivers
+from mcp_yfinance_server.finance.tools.history import get_stock_5y_history as _get_stock_5y_history
+from mcp_yfinance_server.finance.tools.metrics import get_advanced_stock_metrics as _get_advanced_stock_metrics
 
 # ---------------------------------------------------------------------------
 # Logging

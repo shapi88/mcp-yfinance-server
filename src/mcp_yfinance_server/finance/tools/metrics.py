@@ -7,7 +7,7 @@ import json
 import logging
 from typing import Any, Dict
 
-from finance.providers import StockInfoProvider
+from mcp_yfinance_server.finance.providers import StockInfoProvider
 
 logger = logging.getLogger("mcp-yfinance-server")
 

@@ -7,8 +7,8 @@ import json
 import logging
 from typing import Any, Dict
 
-from finance.providers import StockFinancialsProvider, StockHistoryProvider, StockInfoProvider
-from finance.transformers import df_to_records, safe_float, safe_int, series_to_records
+from mcp_yfinance_server.finance.providers import StockFinancialsProvider, StockHistoryProvider, StockInfoProvider
+from mcp_yfinance_server.finance.transformers import df_to_records, safe_float, safe_int, series_to_records
 
 logger = logging.getLogger("mcp-yfinance-server")
 

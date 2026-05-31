@@ -3,7 +3,7 @@ Unit tests for finance.scoring.
 """
 import pytest
 
-from finance.scoring import DRIVER_CONFIGS, DriverConfig, score_metric
+from mcp_yfinance_server.finance.scoring import DRIVER_CONFIGS, DriverConfig, score_metric
 
 
 class TestScoreMetric:

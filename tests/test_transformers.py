@@ -4,7 +4,7 @@ Unit tests for finance.transformers.
 import pandas as pd
 import pytest
 
-from finance.transformers import df_to_records, safe_float, safe_int, series_to_records
+from mcp_yfinance_server.finance.transformers import df_to_records, safe_float, safe_int, series_to_records
 
 
 class TestSafeFloat:

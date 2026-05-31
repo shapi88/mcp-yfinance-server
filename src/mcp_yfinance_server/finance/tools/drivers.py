@@ -9,9 +9,9 @@ import json
 import logging
 from typing import Any, Dict, List, Optional
 
-from finance.providers import StockInfoProvider
-from finance.scoring import DRIVER_CONFIGS, score_metric
-from finance.transformers import safe_float, safe_int
+from mcp_yfinance_server.finance.providers import StockInfoProvider
+from mcp_yfinance_server.finance.scoring import DRIVER_CONFIGS, score_metric
+from mcp_yfinance_server.finance.transformers import safe_float, safe_int
 
 logger = logging.getLogger("mcp-yfinance-server")
 
