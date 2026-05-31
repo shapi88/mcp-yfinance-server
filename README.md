@@ -16,13 +16,19 @@ A Model Context Protocol (MCP) server that provides Yahoo Finance data through y
 
 ## Installation
 
-### Option 1: Install from PyPI
+### Option 1: Install with uv (recommended)
+
+```bash
+uv add mcp-yfinance-server
+```
+
+### Option 2: Install from PyPI
 
 ```bash
 pip install mcp-yfinance-server
 ```
 
-### Option 2: Install from source
+### Option 3: Install from source
 
 ```bash
 git clone https://github.com/shapi88/mcp-yfinance-server.git
@@ -35,7 +41,11 @@ pip install -e .
 ### Running the server
 
 ```bash
-python server.py
+# Using the installed console script
+mcp-yfinance-server
+
+# Or as a Python module
+python -m mcp_yfinance_server
 ```
 
 ### Available MCP Tools
@@ -55,8 +65,20 @@ Add this to your Claude Desktop config file:
 {
   "mcpServers": {
     "yfinance": {
+      "command": "mcp-yfinance-server"
+    }
+  }
+}
+```
+
+If running from source without installing:
+
+```json
+{
+  "mcpServers": {
+    "yfinance": {
       "command": "python",
-      "args": ["/path/to/mcp-yfinance-server/server.py"]
+      "args": ["-m", "mcp_yfinance_server"]
     }
   }
 }
@@ -243,16 +265,28 @@ then weighted to produce an overall score and signal.
 
 ### Requirements
 
-- Python 3.8+
-- `mcp[cli]>=0.1.0`
+- Python 3.10+
+- `mcp[cli]>=1.0.0`
 - `yfinance>=0.2.0`
 - `pandas>=1.5.0`
 
 ### Running tests
 
 ```bash
+# With uv
+uv run pytest tests/ -v
+
+# With pip
 pip install pytest
 pytest tests/ -v
+```
+
+### Linting and type checking
+
+```bash
+# With uv
+uv run ruff check src/ tests/
+uv run pyright
 ```
 
 ## License
