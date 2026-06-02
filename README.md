@@ -46,6 +46,9 @@ mcp-yfinance-server
 
 # Or as a Python module
 python -m mcp_yfinance_server
+
+# Or 
+.venv/bin/mcp dev src/mcp_yfinance_server/server.py:mcp
 ```
 
 ### Available MCP Tools
